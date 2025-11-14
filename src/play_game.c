@@ -1,42 +1,55 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "game_of_lines.h"
 
 
-void game_of_lines(int opponent_is_ai, int size_of_arena, int size_of_win_line);
+void game_of_lines(char isPlayer, int arenaSize, int sizeOfWinLine);
 
 int main(void) {
-    int opponent_is_ai, size_of_arena, size_of_win_line;
     // scan_settings(...); should prompt the user for
     //  1. whether to play against AI or person,
     //  2. the size of the arena,
     //  3. how long a winning line needs to be.
+    char isPlayer;
+    int arenaSize;
+    int sizeOfWinLine;
 
+    scanSettings(&isPlayer, &arenaSize, &sizeOfWinLine);
     // Run the game
-    game_of_lines(opponent_is_ai, size_of_arena, size_of_win_line);
+    game_of_lines(isPlayer, arenaSize, sizeOfWinLine);
 
     return 0;
 }
 
-void game_of_lines(int opponent_is_ai, int size_of_arena, int size_of_win_line) {
+void game_of_lines(char isPlayer, int arenaSize, int sizeOfWinLine) {
     // Create an arena (e.g. use HINT 1)
+    int* arena = (int*)malloc(sizeof(int)*arenaSize*arenaSize); // the arena is quadratic, i.e.
+    for (int i = 0; i < arenaSize * arenaSize; i++) {
+        arena[i] = 0;
+    }
 
-    int whose_turn = 0;  // Who should perform the next move: Player 0 or Player/Computer 1?
-    int the_winner;
+    int moveNumber = 0;  // Who should perform the next move: Player 0 or Player/Computer 1?
+    printArena(arena, arenaSize);
+
+
+    int theWinner = -1;
     do {
-        // scan_move(...);
-        //     or
-        // ai_move(...);
+        updateArena(arena, arenaSize, &moveNumber, &isPlayer);
 
-        // update_arena(...);
+        printArena(arena, arenaSize);
 
-        // print_arena(...);
+         theWinner = winner(arena, &arenaSize, &sizeOfWinLine);
 
-        // the_winner = winner(...);
+    } while (theWinner == -1);
 
-    } while (the_winner == -1);
-
+    if (theWinner == 0) {
+        printf("The game is a draw\n");
+    } else if (theWinner == 1) {
+        printf("The player 1 has won\n");
+    }else if (theWinner == 2 && (isPlayer == 'p' || isPlayer == 'P' )) {
+        printf("The player 2 has won\n");
+    } else {
+        printf("The AI has won\n");
+    }
     // Print who won (the_winner).
-
 }
