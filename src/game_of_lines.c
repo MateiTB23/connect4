@@ -2,14 +2,14 @@
 
 // Implement functions defined in game_of_lines.h
 
-void scanSettings(char *isPlayer, int *arenaSize, int *lineLength) {
+void scanSettings(char *isComputer, int *arenaSize, int *lineLength) {
     char temp;
     printf("Welcome to the connect game\n Do you want to play against another player or AI?\n");
-    printf("Enter A or a for AI and p or P for player\n");
+    printf("Play against computer (y/n)>\n");
     scanf("%c", &temp);
     while (true) {
-        if (temp == 'a' || temp == 'A' || temp == 'p' || temp == 'P') {
-            *isPlayer = temp;
+        if (temp == 'y' || temp == 'Y' || temp == 'n' || temp == 'N') {
+            *isComputer = temp;
             break;
         } else {
             printf("Invalid input, try again\n");
@@ -26,12 +26,12 @@ void scanSettings(char *isPlayer, int *arenaSize, int *lineLength) {
     } while (lineLength >= arenaSize);
 }
 
-void scanMove(int *arena, int sizeOfArena, int *moveNumber, char* isPlayer) {
+void scanMove(int *arena, int sizeOfArena, int *moveNumber, char* isComputer) {
     int x;
     int isFound = 0;
     srand(time(NULL));
     while (isFound == 0) {
-        if (*isPlayer == 'p' || *isPlayer == 'P' || *moveNumber%2==0){
+        if (*isComputer == 'n' || *isComputer == 'N' || *moveNumber%2==0){
         printf("\nTurn of player %d\nEnter the move you want to play like this: 2, if you want it in colon 2, if colon is full, you will be asked again\n", *moveNumber%2+1);
         scanf("%d", &x);
         } else {
@@ -59,16 +59,16 @@ int *get_cell(int *arena, int sizeOfArena, int x, int y) {
     return &arena[x * sizeOfArena + y];
 }
 
-void updateArena(int *arena, int sizeOfArena, int *moveNumber, char *isPlayer) {
+void updateArena(int *arena, int sizeOfArena, int *moveNumber, char *isComputer) {
     if (*moveNumber % 2 == 0) {
-        scanMove(arena, sizeOfArena, moveNumber, isPlayer);
+        scanMove(arena, sizeOfArena, moveNumber, isComputer);
         *moveNumber = *moveNumber + 1;
     } else {
-        if (*isPlayer == 'p' || *isPlayer == 'P') {
-            scanMove(arena, sizeOfArena, moveNumber, isPlayer);
+        if (*isComputer == 'p' || *isComputer == 'P') {
+            scanMove(arena, sizeOfArena, moveNumber, isComputer);
             *moveNumber = *moveNumber + 1;
         } else {
-            scanMove(arena, sizeOfArena, moveNumber, isPlayer);
+            scanMove(arena, sizeOfArena, moveNumber, isComputer);
             *moveNumber = *moveNumber + 1;
         }
     }

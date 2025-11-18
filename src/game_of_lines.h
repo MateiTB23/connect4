@@ -4,13 +4,13 @@
 #include <time.h>
 
 // Define function prototypes, (and new datatypes if you need it).
-void scanSettings(char *isPlayer, int *arenaSize, int *lineLength);
+void scanSettings(char *isComputer, int *arenaSize, int *lineLength);
 
-void scanMove(int *arena, int sizeOfArena, int *moveNumber, char *isPlayer);
+void scanMove(int *arena, int sizeOfArena, int *moveNumber, char *isComputer);
 
 int *get_cell(int *arena, int sizeOfArena, int x, int y);
 
-void updateArena(int *arena, int sizeOfArena, int *moveNumber, char *isPlayer);
+void updateArena(int *arena, int sizeOfArena, int *moveNumber, char *isComputer);
 
 void printArena(int *arena, int sizeOfArena);
 
