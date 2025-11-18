@@ -3,15 +3,20 @@
 #include <stdbool.h>
 #include <time.h>
 
-// Define function prototypes, (and new datatypes if you need it).
+//Prototype til funktion scanSettings som scanner de indstillinger brugeren vil have til spillet
 void scanSettings(char *isComputer, int *arenaSize, int *lineLength);
 
+//Prototype til funktion scanMove der scanner det næste move for bruger eller AI
 void scanMove(int *arena, int sizeOfArena, int *moveNumber, char *isComputer);
 
-int *get_cell(int *arena, int sizeOfArena, int x, int y);
-
+//Funktion updateArena der opdaterer arenaen efter hvert move
 void updateArena(int *arena, int sizeOfArena, int *moveNumber, char *isComputer);
 
+//Funktion printArena der printer arenean efter hvert move
 void printArena(int *arena, int sizeOfArena);
 
+//Funktion winner som returnerer hvem vinderen er når der er en vinder
 int winner(int *arena, int *sizeOfArena, int *lineLength);
+
+//Prototype til funktion gameOfLines der kalder de andre funktioner
+void gameOfLines(char isComputer, int arenaSize, int sizeOfWinLine);

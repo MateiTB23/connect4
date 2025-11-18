@@ -1,12 +1,14 @@
 #include "game_of_lines.h"
 
-// Implement functions defined in game_of_lines.h
-
+//funktion scanSettings der scanner brugerens settings
 void scanSettings(char *isComputer, int *arenaSize, int *lineLength) {
+    //midlertidlig variabel
     char temp;
-    printf("Welcome to the connect game\n Do you want to play against another player or AI?\n");
+    //brugeren spørges om de vil spille mod en computer eller ej
     printf("Play against computer (y/n)>\n");
+    //deres svar gemmes
     scanf("%c", &temp);
+    //Hvis inputtet passer, så gemmes den, eller spørges brugeren igen
     while (true) {
         if (temp == 'y' || temp == 'Y' || temp == 'n' || temp == 'N') {
             *isComputer = temp;
@@ -16,64 +18,66 @@ void scanSettings(char *isComputer, int *arenaSize, int *lineLength) {
             scanf("%c", &temp);
         }
     }
+
+    //Brugeren bliver spurgt om størrelsen af arenean
     printf("Enter the size of the arena as an integer value n, for n*n arena\n");
+    //Størrelse af  arena gemmes i int pointer arenaSize
     scanf("%d", arenaSize);
 
-
+    //Brugeren spørges om størrelse på linje der skal vinde spillet, som gemmes i pointer lineLength, hvis ikke større end 0 og <= arena størrelse, så spørges bruger igen
     do {
         printf("Enter the length of the line to win the game, it must be an integer smaller than arena size\n");
         scanf("%d", lineLength);
     } while (*lineLength <= 0 || *lineLength > *arenaSize);
 }
 
-void scanMove(int *arena, int sizeOfArena, int *moveNumber, char* isComputer) {
+//funktion scanmove, til at beregne brugeren eller AI næste move
+void scanMove(int *arena, int sizeOfArena, int *moveNumber, char *isComputer) {
+    //variabler x og isFound til lokation i array og om movet kan spilles
     int x;
-    int isFound = 0;
-    while (isFound == 0) {
-        if (*isComputer == 'n' || *isComputer == 'N' || *moveNumber%2==0){
-        printf("\nTurn of player %d\nEnter the move you want to play like this: 2, if you want it in colon 2, if colon is full, you will be asked again\n", *moveNumber%2+1);
-        scanf("%d", &x);
+    bool isFound = false;
+    //mens isFound er falsk
+    while (isFound == false) {
+        //tjek hvis det er en bruger der skal spille
+        if (*isComputer == 'n' || *isComputer == 'N' || *moveNumber % 2 == 0) {
+            //hvis det er brugeren, så bliver bruger promptet til at skrive deres move, som gemmes i x
+            printf(
+                "\nTurn of player %d\nEnter the move you want to play like this: 2, if you want it in colon 2, if colon is full, you will be asked again\n",
+                *moveNumber % 2 + 1);
+            scanf("%d", &x);
+            //ellers hvis det ikke er spilleren
         } else {
+            //så må det være AI tur, og dens move beregnes ved hjælp af rand og arenastørrelsen
             printf("\n\nTurn of AI\n\n");
             x = rand() % (sizeOfArena);
         }
-        // Check if column is full
+        // Check hvis colonne er fuld
         if (arena[0 * sizeOfArena + x] != 0) {
             printf("That column is full. Try again.\n");
-            continue; // ask for a new column
+            continue; // spørger efter ny colonne
         }
+        //Check hvis at colonnen hvor brugeren vil ligge en cirkel er udfyldt
         for (int i = sizeOfArena - 1; i >= 0; i--) {
+            //hvis udfyldt sker der ikke noget
             if (arena[i * sizeOfArena + x] == 1 || arena[i * sizeOfArena + x] == 2) {
+                //hvis ikke udfyldt, så ligges 1 hvis det er bruger move på pladsen, eller 2 hvis bruger 2 eller AI
             } else {
-                arena[i * sizeOfArena + x] = *moveNumber%2+1;
-                isFound = 1;
+                arena[i * sizeOfArena + x] = *moveNumber % 2 + 1;
+                //isFound sættes til sand
+                isFound = true;
                 break;
             }
         }
     }
 }
 
-
-int *get_cell(int *arena, int sizeOfArena, int x, int y) {
-    return &arena[x * sizeOfArena + y];
-}
-
+//funktion updateArena, som opdaterer arenaen baseret på nyeste move
 void updateArena(int *arena, int sizeOfArena, int *moveNumber, char *isComputer) {
-    if (*moveNumber % 2 == 0) {
-        scanMove(arena, sizeOfArena, moveNumber, isComputer);
-        *moveNumber = *moveNumber + 1;
-    } else {
-        if (*isComputer == 'n' || *isComputer == 'N') {
-            scanMove(arena, sizeOfArena, moveNumber, isComputer);
-            *moveNumber = *moveNumber + 1;
-        } else {
-            scanMove(arena, sizeOfArena, moveNumber, isComputer);
-            *moveNumber = *moveNumber + 1;
-        }
-    }
-
+    scanMove(arena, sizeOfArena, moveNumber, isComputer);
+    (*moveNumber)++;
 }
 
+//Funktion printArena, som looper igennem arena og printer den
 void printArena(int *arena, int sizeOfArena) {
     for (int i = 0; i < sizeOfArena; i++) {
         for (int j = 0; j < sizeOfArena; j++)
@@ -82,8 +86,11 @@ void printArena(int *arena, int sizeOfArena) {
     }
 }
 
+//Funktion winner, som scanner hvis der er en vinder, og returnerer en værdi baseret på hvem det er
 int winner(int *arena, int *sizeOfArena, int *lineLength) {
-    //diagonal check for top left to bottom right
+    //I hele funktionen bliver der returneret 1 hvis spiller 1 vinder, 2 hvis spiller 2 eller AI vinder og 0 hvis uafgjort, -1 ellers
+
+    //diagonal check fra venstre top til højre bund
     for (int rowStart = 0; rowStart < *sizeOfArena - (*lineLength - 1); rowStart++) {
         int countPlayer = 0;
         int countAI = 0;
@@ -130,7 +137,7 @@ int winner(int *arena, int *sizeOfArena, int *lineLength) {
     }
 
 
-    //diagonal check for bottom left to top right
+    //diagonal check fra bund venstre til højre top
     for (int rowStart = *sizeOfArena - 1; rowStart >= (*lineLength - 1); rowStart--) {
         int countPlayer = 0;
         int countAI = 0;
@@ -178,7 +185,7 @@ int winner(int *arena, int *sizeOfArena, int *lineLength) {
     }
 
 
-    //Horizontal check
+    //Horizontalt check
     for (int rowStart = 0; rowStart < (*sizeOfArena); rowStart++) {
         int countPlayer = 0;
         int countAI = 0;
@@ -202,7 +209,7 @@ int winner(int *arena, int *sizeOfArena, int *lineLength) {
         }
     }
 
-    //vertical check
+    //Vertikalt check
     for (int colStart = 0; colStart < (*sizeOfArena); colStart++) {
         int countPlayer = 0;
         int countAI = 0;
@@ -224,6 +231,18 @@ int winner(int *arena, int *sizeOfArena, int *lineLength) {
                 return 2;
             }
         }
+    }
+    // check for uafgjort
+    int full = 1;
+    for (int i = 0; i < (*sizeOfArena) * (*sizeOfArena); i++) {
+        if (arena[i] == 0) {
+            // 0 er tom i din nuværende repræsentation
+            full = 0;
+            break;
+        }
+    }
+    if (full) {
+        return 0; // uafgjort
     }
     return -1;
 }
