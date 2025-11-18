@@ -23,13 +23,12 @@ void scanSettings(char *isComputer, int *arenaSize, int *lineLength) {
     do {
         printf("Enter the length of the line to win the game, it must be an integer smaller than arena size\n");
         scanf("%d", lineLength);
-    } while (lineLength >= arenaSize);
+    } while (*lineLength <= 0 || *lineLength > *arenaSize);
 }
 
 void scanMove(int *arena, int sizeOfArena, int *moveNumber, char* isComputer) {
     int x;
     int isFound = 0;
-    srand(time(NULL));
     while (isFound == 0) {
         if (*isComputer == 'n' || *isComputer == 'N' || *moveNumber%2==0){
         printf("\nTurn of player %d\nEnter the move you want to play like this: 2, if you want it in colon 2, if colon is full, you will be asked again\n", *moveNumber%2+1);
@@ -64,7 +63,7 @@ void updateArena(int *arena, int sizeOfArena, int *moveNumber, char *isComputer)
         scanMove(arena, sizeOfArena, moveNumber, isComputer);
         *moveNumber = *moveNumber + 1;
     } else {
-        if (*isComputer == 'p' || *isComputer == 'P') {
+        if (*isComputer == 'n' || *isComputer == 'N') {
             scanMove(arena, sizeOfArena, moveNumber, isComputer);
             *moveNumber = *moveNumber + 1;
         } else {

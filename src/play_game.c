@@ -6,16 +6,11 @@
 void game_of_lines(char isComputer, int arenaSize, int sizeOfWinLine);
 
 int main(void) {
-    // scan_settings(...); should prompt the user for
-    //  1. whether to play against AI or person,
-    //  2. the size of the arena,
-    //  3. how long a winning line needs to be.
+    srand(time(NULL));
     char isComputer;
     int arenaSize;
     int sizeOfWinLine;
-
     scanSettings(&isComputer, &arenaSize, &sizeOfWinLine);
-    // Run the game
     game_of_lines(isComputer, arenaSize, sizeOfWinLine);
 
     return 0;
