@@ -32,19 +32,17 @@ void scanSettings(char *isComputer, int *arenaSize, int *lineLength) {
 }
 
 //funktion scanmove, til at beregne brugeren eller AI næste move
-void scanMove(int *arena, int sizeOfArena, int *moveNumber, char *isComputer) {
+void scanMove(int *arena, int sizeOfArena, int *moveNumber, char* isComputer) {
     //variabler x og isFound til lokation i array og om movet kan spilles
     int x;
     bool isFound = false;
     //mens isFound er falsk
     while (isFound == false) {
         //tjek hvis det er en bruger der skal spille
-        if (*isComputer == 'n' || *isComputer == 'N' || *moveNumber % 2 == 0) {
+        if (*isComputer == 'n' || *isComputer == 'N' || *moveNumber%2==0){
             //hvis det er brugeren, så bliver bruger promptet til at skrive deres move, som gemmes i x
-            printf(
-                "\nTurn of player %d\nEnter the move you want to play like this: 2, if you want it in colon 2, if colon is full, you will be asked again\n",
-                *moveNumber % 2 + 1);
-            scanf("%d", &x);
+        printf("\nTurn of player %d\nEnter the move you want to play like this: 2, if you want it in colon 2, if colon is full, you will be asked again\n", *moveNumber%2+1);
+        scanf("%d", &x);
             //ellers hvis det ikke er spilleren
         } else {
             //så må det være AI tur, og dens move beregnes ved hjælp af rand og arenastørrelsen
@@ -62,7 +60,7 @@ void scanMove(int *arena, int sizeOfArena, int *moveNumber, char *isComputer) {
             if (arena[i * sizeOfArena + x] == 1 || arena[i * sizeOfArena + x] == 2) {
                 //hvis ikke udfyldt, så ligges 1 hvis det er bruger move på pladsen, eller 2 hvis bruger 2 eller AI
             } else {
-                arena[i * sizeOfArena + x] = *moveNumber % 2 + 1;
+                arena[i * sizeOfArena + x] = *moveNumber%2+1;
                 //isFound sættes til sand
                 isFound = true;
                 break;
@@ -235,14 +233,13 @@ int winner(int *arena, int *sizeOfArena, int *lineLength) {
     // check for uafgjort
     int full = 1;
     for (int i = 0; i < (*sizeOfArena) * (*sizeOfArena); i++) {
-        if (arena[i] == 0) {
-            // 0 er tom i din nuværende repræsentation
+        if (arena[i] == 0) {   // 0 er tom i din nuværende repræsentation
             full = 0;
             break;
         }
     }
     if (full) {
-        return 0; // uafgjort
+        return 0;   // uafgjort
     }
     return -1;
 }

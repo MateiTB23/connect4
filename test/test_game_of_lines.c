@@ -102,6 +102,7 @@ TEST_CASE(testUpdateArenaAI,
           for (int col = 0; col < size; col++) {
           if (arena[3 * size + col] == 2) {
           countAI++;
+          aiColumn = col;
           }
           }
 
